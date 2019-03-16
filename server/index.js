@@ -17,7 +17,6 @@ app.use('/api/pitanja', require('./api/pitanja'));
 app.use('/api/pv', require('./api/pv'));
 //app.use('/api/pitanja', require('./api/pitanja'));
 //app.use('/api/pitanja', require('./api/pitanja'));
-app.use('/api/weather', require('./api/weather'));
 
 if (ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));

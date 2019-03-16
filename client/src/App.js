@@ -1,26 +1,54 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import Navbar from './components/layout/Navbar';
+import Dashboard from './components/dashboard/Dashboard';
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      log_name: null,
+      password: null,
+      role: null
+    }
+    this.changeUser = this.changeUser.bind(this);
+    this.log_out = this.log_out.bind(this);
+  }
+
+  changeUser(log_ime,password,role){
+    this.setState ({
+      log_name: log_ime,
+      password: password,
+      role: role
+    });
+  }
+  
+  log_out(){
+    this.setState ({
+      log_name: null,
+      password: null,
+      role: null     
+    });
+    console.log("logout")
+  }
+  
+
   render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+    return ( 
+      <BrowserRouter>
+        <div className="App">  
+            <Navbar log_out ={this.log_out} log_name={this.state.log_name} />
+            <br/><br/>
+            {this.state.log_ime}
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route path="/signin" render={(props) => <SignIn {...props} change={this.changeUser} />}/>
+              <Route path="/signup" component={SignUp}/>
+              
+            </Switch>
+        </div> 
+      </BrowserRouter>       
     );
   }
 }
