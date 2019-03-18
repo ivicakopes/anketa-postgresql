@@ -8,8 +8,6 @@ const Navbar = (props)=> {
    const { log_name } = props;
    const links = log_name ?  <SignedInLinks log_out={props.log_out}/> : <SignedOutLinks/>;
    const name = log_name ?  log_name  : 'Nije logovan';
-   console.log("navbar");
-   console.log(props);
   
    return(      
       <nav className="nav-wrapper green darken-3">

@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use('/api/vrste', require('./api/vrste'));
 app.use('/api/pitanja', require('./api/pitanja'));
 app.use('/api/pv', require('./api/pv'));
-//app.use('/api/pitanja', require('./api/pitanja'));
+app.use('/api/korisnik', require('./api/korisnik'));
 //app.use('/api/pitanja', require('./api/pitanja'));
 
 if (ENV === 'production') {

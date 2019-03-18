@@ -2,8 +2,6 @@ import React from 'react';
 import {NavLink} from 'react-router-dom';
 
 const SignedInLinks = (props)=> {
-   console.log("signedinlinks");
-   console.log(props);
    return(
       <ul className="right">
          <li><a href="/signin" onClick ={props.log_out}>LogOut</a></li>

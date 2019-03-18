@@ -11,6 +11,14 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/bezAdmina', (req, res) => {
+  Vrste.retrieveAllBezAdmina((err, vrste) => {
+    if (err)
+      return res.json(err);
+    return res.json(vrste);
+  });
+});
+
 router.post('/', (req, res) => {
   var vrste = req.body.vrste;
 
