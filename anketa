@@ -1,0 +1,530 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 10.6
+-- Dumped by pg_dump version 11.2
+
+-- Started on 2019-03-20 08:41:39
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+DROP DATABASE anketa;
+--
+-- TOC entry 2879 (class 1262 OID 16413)
+-- Name: anketa; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE anketa WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'English_United States.1252' LC_CTYPE = 'English_United States.1252';
+
+
+ALTER DATABASE anketa OWNER TO postgres;
+
+\connect anketa
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 206 (class 1259 OID 16572)
+-- Name: ankete_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.ankete_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.ankete_id_seq OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 199 (class 1259 OID 16438)
+-- Name: ankete; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ankete (
+    id_ankete numeric(11,0) DEFAULT nextval('public.ankete_id_seq'::regclass) NOT NULL,
+    naziv_ankete character varying(50) NOT NULL,
+    vrsta_ankete integer NOT NULL,
+    datum daterange NOT NULL
+);
+
+
+ALTER TABLE public.ankete OWNER TO postgres;
+
+--
+-- TOC entry 210 (class 1259 OID 16580)
+-- Name: ankete_pitanja-vrste_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."ankete_pitanja-vrste_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."ankete_pitanja-vrste_id_seq" OWNER TO postgres;
+
+--
+-- TOC entry 200 (class 1259 OID 16443)
+-- Name: ankete_pitanja_vrste; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.ankete_pitanja_vrste (
+    id_apv integer DEFAULT nextval('public."ankete_pitanja-vrste_id_seq"'::regclass) NOT NULL,
+    anketa_id integer NOT NULL,
+    pv_id integer NOT NULL
+);
+
+
+ALTER TABLE public.ankete_pitanja_vrste OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 16479)
+-- Name: cities_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.cities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.cities_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 203 (class 1259 OID 16474)
+-- Name: cities; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.cities (
+    id integer DEFAULT nextval('public.cities_id_seq'::regclass) NOT NULL,
+    city_name character varying(30) NOT NULL
+);
+
+
+ALTER TABLE public.cities OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 16574)
+-- Name: korisnik_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.korisnik_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.korisnik_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 201 (class 1259 OID 16455)
+-- Name: korisnik; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.korisnik (
+    id_korisnik integer DEFAULT nextval('public.korisnik_id_seq'::regclass) NOT NULL,
+    log_ime character varying(30) NOT NULL,
+    password character varying(30) NOT NULL,
+    vrsta_id integer NOT NULL,
+    ime character varying(30) NOT NULL,
+    prezime character varying(30) NOT NULL
+);
+
+
+ALTER TABLE public.korisnik OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 16576)
+-- Name: odgovori_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.odgovori_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.odgovori_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 16463)
+-- Name: odgovori; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.odgovori (
+    id_odgovora integer DEFAULT nextval('public.odgovori_id_seq'::regclass) NOT NULL,
+    korisnik_id integer NOT NULL,
+    anketa_id integer NOT NULL,
+    pitanje_id integer NOT NULL
+);
+
+
+ALTER TABLE public.odgovori OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 16578)
+-- Name: pitanja_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.pitanja_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pitanja_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 196 (class 1259 OID 16420)
+-- Name: pitanja; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pitanja (
+    id_pitanja integer DEFAULT nextval('public.pitanja_id_seq'::regclass) NOT NULL,
+    pitanje character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.pitanja OWNER TO postgres;
+
+--
+-- TOC entry 211 (class 1259 OID 16582)
+-- Name: pitanja_vrste_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.pitanja_vrste_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.pitanja_vrste_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 198 (class 1259 OID 16430)
+-- Name: pitanja_vrste; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.pitanja_vrste (
+    id_pv integer DEFAULT nextval('public.pitanja_vrste_id_seq'::regclass) NOT NULL,
+    pitanje_id integer NOT NULL,
+    vrsta_id integer NOT NULL
+);
+
+
+ALTER TABLE public.pitanja_vrste OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 16570)
+-- Name: vrsta_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.vrsta_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.vrsta_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 16425)
+-- Name: vrste; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.vrste (
+    id_vrste integer DEFAULT nextval('public.vrsta_id_seq'::regclass) NOT NULL,
+    naziv_vrste character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.vrste OWNER TO postgres;
+
+--
+-- TOC entry 2861 (class 0 OID 16438)
+-- Dependencies: 199
+-- Data for Name: ankete; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.ankete (id_ankete, naziv_ankete, vrsta_ankete, datum) VALUES (1, 'anketa 1', 1, '[2019-02-02,2019-03-12)');
+INSERT INTO public.ankete (id_ankete, naziv_ankete, vrsta_ankete, datum) VALUES (2, 'anketa 2', 2, '[2019-02-02,2019-03-12)');
+
+
+--
+-- TOC entry 2862 (class 0 OID 16443)
+-- Dependencies: 200
+-- Data for Name: ankete_pitanja_vrste; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2865 (class 0 OID 16474)
+-- Dependencies: 203
+-- Data for Name: cities; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.cities (id, city_name) VALUES (2, 'Toronto');
+INSERT INTO public.cities (id, city_name) VALUES (3, 'Valjevo');
+INSERT INTO public.cities (id, city_name) VALUES (5, 'Subotica');
+INSERT INTO public.cities (id, city_name) VALUES (6, 'Zagreb');
+INSERT INTO public.cities (id, city_name) VALUES (9, 'Novi Sad');
+INSERT INTO public.cities (id, city_name) VALUES (14, 'Belgrade');
+
+
+--
+-- TOC entry 2863 (class 0 OID 16455)
+-- Dependencies: 201
+-- Data for Name: korisnik; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.korisnik (id_korisnik, log_ime, password, vrsta_id, ime, prezime) VALUES (9, 'blob', 'b', 1, 'b', 'b');
+INSERT INTO public.korisnik (id_korisnik, log_ime, password, vrsta_id, ime, prezime) VALUES (17, 'klok', 'd', 3, 'fghdf', 'sd');
+INSERT INTO public.korisnik (id_korisnik, log_ime, password, vrsta_id, ime, prezime) VALUES (1, 'ivica.kopes@gmail.com', 'a', 0, 'Ivica', 'Kopes');
+
+
+--
+-- TOC entry 2864 (class 0 OID 16463)
+-- Dependencies: 202
+-- Data for Name: odgovori; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 2858 (class 0 OID 16420)
+-- Dependencies: 196
+-- Data for Name: pitanja; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (7, 'Pitanje 6');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (1, 'Pitanje 1');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (2, 'Pitanje 2');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (3, 'Pitanje 3');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (4, 'Pitanje 4');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (5, 'Pitanje 5');
+
+
+--
+-- TOC entry 2860 (class 0 OID 16430)
+-- Dependencies: 198
+-- Data for Name: pitanja_vrste; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (1, 2, 4);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (3, 3, 4);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (4, 5, 4);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (5, 6, 1);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (6, 6, 4);
+
+
+--
+-- TOC entry 2859 (class 0 OID 16425)
+-- Dependencies: 197
+-- Data for Name: vrste; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (1, 'Vrsta 1');
+INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (2, 'Vrsta 2');
+INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (3, 'Vrsta 3');
+INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (4, 'Vrsta 4');
+INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (0, 'admin');
+
+
+--
+-- TOC entry 2881 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: ankete_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.ankete_id_seq', 1, false);
+
+
+--
+-- TOC entry 2882 (class 0 OID 0)
+-- Dependencies: 210
+-- Name: ankete_pitanja-vrste_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."ankete_pitanja-vrste_id_seq"', 1, false);
+
+
+--
+-- TOC entry 2883 (class 0 OID 0)
+-- Dependencies: 204
+-- Name: cities_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.cities_id_seq', 14, true);
+
+
+--
+-- TOC entry 2884 (class 0 OID 0)
+-- Dependencies: 207
+-- Name: korisnik_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.korisnik_id_seq', 29, true);
+
+
+--
+-- TOC entry 2885 (class 0 OID 0)
+-- Dependencies: 208
+-- Name: odgovori_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.odgovori_id_seq', 1, false);
+
+
+--
+-- TOC entry 2886 (class 0 OID 0)
+-- Dependencies: 209
+-- Name: pitanja_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.pitanja_id_seq', 533, true);
+
+
+--
+-- TOC entry 2887 (class 0 OID 0)
+-- Dependencies: 211
+-- Name: pitanja_vrste_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.pitanja_vrste_id_seq', 8, true);
+
+
+--
+-- TOC entry 2888 (class 0 OID 0)
+-- Dependencies: 205
+-- Name: vrsta_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.vrsta_id_seq', 5, true);
+
+
+--
+-- TOC entry 2726 (class 2606 OID 16489)
+-- Name: pitanja_vrste a_pitanja_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pitanja_vrste
+    ADD CONSTRAINT a_pitanja_pkey PRIMARY KEY (id_pv);
+
+
+--
+-- TOC entry 2730 (class 2606 OID 16543)
+-- Name: ankete_pitanja_vrste ankete_pitanja_vrste_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ankete_pitanja_vrste
+    ADD CONSTRAINT ankete_pitanja_vrste_pkey PRIMARY KEY (id_apv);
+
+
+--
+-- TOC entry 2728 (class 2606 OID 16442)
+-- Name: ankete ankete_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.ankete
+    ADD CONSTRAINT ankete_pkey PRIMARY KEY (id_ankete);
+
+
+--
+-- TOC entry 2736 (class 2606 OID 16593)
+-- Name: cities cities_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.cities
+    ADD CONSTRAINT cities_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2732 (class 2606 OID 16533)
+-- Name: korisnik korisnik_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.korisnik
+    ADD CONSTRAINT korisnik_pkey PRIMARY KEY (id_korisnik);
+
+
+--
+-- TOC entry 2734 (class 2606 OID 16515)
+-- Name: odgovori odgovori_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.odgovori
+    ADD CONSTRAINT odgovori_pkey PRIMARY KEY (id_odgovora);
+
+
+--
+-- TOC entry 2722 (class 2606 OID 16509)
+-- Name: pitanja pitanja_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.pitanja
+    ADD CONSTRAINT pitanja_pkey PRIMARY KEY (id_pitanja);
+
+
+--
+-- TOC entry 2724 (class 2606 OID 16483)
+-- Name: vrste vrsta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vrste
+    ADD CONSTRAINT vrsta_pkey PRIMARY KEY (id_vrste);
+
+
+--
+-- TOC entry 2880 (class 0 OID 0)
+-- Dependencies: 2879
+-- Name: DATABASE anketa; Type: ACL; Schema: -; Owner: postgres
+--
+
+GRANT ALL ON DATABASE anketa TO ivek WITH GRANT OPTION;
+
+
+-- Completed on 2019-03-20 08:41:39
+
+--
+-- PostgreSQL database dump complete
+--
+
