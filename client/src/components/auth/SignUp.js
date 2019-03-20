@@ -67,21 +67,12 @@ handleSubmit = (e) => {
 }
 
 handleRadio = (e) => {
-  console.log("e1 " + e.target.value);
-  console.log("state1 " + this.state.roleSelected);
   var roleSelected = e.target.value;
-  console.log("rs1 " + roleSelected);
   if(roleSelected !== undefined) 
-    this.setState ({ roleSelected })  
-  /* .then (() => { 
-    console.log("e2 " + e.target.value);
-    console.log("rs2 " + roleSelected)
-    console.log("state2 " + this.state.roleSelected) }) */
+    this.setState ({ roleSelected })
 }
 
-toggleRadio = (e) => {  
-  //console.log("role selected 1 " + this.state.roleSelected)
-}
+toggleRadio (){}
 
 handleChange = (e) => {
   this.setState ({

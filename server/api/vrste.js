@@ -4,18 +4,18 @@ var Vrste = require('../models/vrste');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-  Vrste.retrieveAll((err, vrste) => {
+  Vrste.retrieveAll((err, result) => {
     if (err)
       return res.json(err);
-    return res.json(vrste);
+    return res.json(result);
   });
 });
 
 router.get('/bezAdmina', (req, res) => {
-  Vrste.retrieveAllBezAdmina((err, vrste) => {
+  Vrste.retrieveAllBezAdmina((err, result) => {
     if (err)
       return res.json(err);
-    return res.json(vrste);
+    return res.json(result);
   });
 });
 

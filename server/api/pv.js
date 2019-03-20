@@ -4,10 +4,10 @@ var PV = require('../models/pv');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-  PV.retrieveAll((err, pv) => {
+  PV.retrieveAll((err, result) => {
     if (err)
       return res.json(err);
-    return res.json(pv);
+    return res.json(result);
   });
 });
 

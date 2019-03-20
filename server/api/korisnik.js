@@ -4,29 +4,29 @@ var Korisnik = require('../models/korisnik');
 var router = express.Router();
 
 router.get('/', (req, res) => {
-  Korisnik.retrieveAll((err, korisnik) => {
+  Korisnik.retrieveAll((err, result) => {
     if (err)
       return res.json(err);
-    return res.json(korisnik);
+    return res.json(result);
   });
 });
 
 router.get('/:log_name', (req, res) => {
   var log_name = req.params.log_name;
-  Korisnik.retrieveKorisnikByLogIme(log_name, (err, korisnik) => {
+  Korisnik.retrieveKorisnikByLogIme(log_name, (err, result) => {
     if (err)
       return res.json(err);
-    return res.json(korisnik);
+    return res.json(result);
   });
 });
 
 router.get('/:log_name/:password', (req, res) => {
   var log_name = req.params.log_name;
   var password = req.params.password;
-  Korisnik.retrieveKorisnikByLogImeAndPassword(log_name,  password, (err, korisnik) => {
+  Korisnik.retrieveKorisnikByLogImeAndPassword(log_name,  password, (err, result) => {
     if (err)
       return res.json(err);
-    return res.json(korisnik);
+    return res.json(result);
   });
 });
 

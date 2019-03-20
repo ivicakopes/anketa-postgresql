@@ -4,6 +4,11 @@ import Navbar from './components/layout/Navbar';
 import Dashboard from './components/dashboard/Dashboard';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
+import Popuni from './components/adminScreen/popuniAnketu';
+import Pregled from './components/adminScreen/pregled';
+import Ankete from './components/adminScreen/ankete';
+import Pitanja from './components/adminScreen/pitanja';
+import Vrste from './components/adminScreen/vrste';
 class App extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +30,7 @@ class App extends Component {
    // .then(res => this.setState({ postoji: res[0] }))
     .then (res => {
       console.log(res);      
-      console.log(res[0].id_korisnik);
+    //  console.log(res[0].id_korisnik);
       this.setState({  
         id_korisnik: res[0].id_korisnik,     
         log_name : res[0].log_ime,
@@ -64,11 +69,17 @@ class App extends Component {
     return ( 
       <BrowserRouter>
         <div className="App">  
-            <Navbar log_out ={this.log_out} log_name={this.state.log_name} />
+            <Navbar log_out ={this.log_out} log_name={this.state.log_name} role={this.state.role}/>
             <br/><br/>
             {this.state.log_ime}
             <Switch>
               <Route exact path="/" component={Dashboard} />
+              <Route path="/vrste" component={Vrste} />
+              <Route path="/pitanja" component={Pitanja} />
+              <Route path="/popuni" component={Popuni} />
+              <Route path="/pregled" component={Pregled} />
+              <Route path="/ankete" component={Ankete} />
+              
               <Route path="/signin" render={(props) => <SignIn {...props} change={this.changeUser} />}/>
               <Route path="/signup" render={(props) => <SignUp {...props} change={this.changeUser} />}/>
               

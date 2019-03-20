@@ -1,19 +1,19 @@
 var express = require('express');
-var Pitanja = require('../models/pitanja');
+var Ankete = require('../models/ankete');
 
 var router = express.Router();
 
 router.get('/', (req, res) => {
-  Pitanja.retrieveAll((err, result) => {
+  Ankete.retrieveAll((err, result) => {
     if (err)
       return res.json(err);
     return res.json(result);
   });
 });
 
-router.get('/:pitanje', (req, res) => {
-  var pitanje = req.params.pitanje;
-  Pitanja.retrievePitanjeByTekst(pitanje, (err, result) => {
+router.get('/:anketa', (req, res) => {
+  var anketa = req.params.anketa;
+  Ankete.retrieveAnketaById(anketa, (err, result) => {
     if (err)
       return res.json(err);
     return res.json(result);
@@ -21,9 +21,9 @@ router.get('/:pitanje', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  var pitanje = req.body.pitanje;
+  var anketa = req.body.anketa;
 
-  Pitanja.insert(pitanje, (err, result) => {
+  Ankete.insert(anketa, (err, result) => {
     if (err)
       return res.json(err);
     return res.json(result);
