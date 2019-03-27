@@ -21,7 +21,8 @@ class Pitanja extends Component {
          novoPitanje: '',
          pitanjeSaId: null,
          pitanjaList: [],
-         bazaPitanja: []
+         bazaPitanja: [],
+         selectedPitanje: null
       };
     }
         
@@ -40,12 +41,8 @@ class Pitanja extends Component {
       var pit = this.state.novoPitanje;
       fetch(`/api/pitanja/${pit}`)
       .then(res =>res.json())
-      .then(pitanjeSaId => {
-         console.log('resultat 2 je ' + pitanjeSaId.id_pitanja.value);      
-         this.setState({ pitanjeSaId });
-         console.log('2. potrebno');  
-         console.log('1.GETPITANJE ' + this.state.pitanjeSaId.pitanje); 
-         
+      .then(pitanjeSaId => {   
+         this.setState({ pitanjeSaId });         
       });
    };
 
@@ -70,7 +67,6 @@ class Pitanja extends Component {
 
 
    handleDodajPitanje = () => {
-      console.log('1. potrebno'); 
       fetch('/api/pitanja', {
          method: 'post',
          headers: { 'Content-Type': 'application/json' },
@@ -84,19 +80,25 @@ class Pitanja extends Component {
          this.setState({ novoPitanje: ''});    //brise tekst pitanja ,ali ima ceo slog u pitanjeSaId
          this.getPitanjaList(); 
          for (const checkbox of this.selectedCheckboxes) {
-            this.handleDodajPV(this.state.pitanjeSaId.id_pitanja,checkbox);
+            this.handleDodajPV(this.state.pitanjeSaId.id_pitanja, checkbox);
          }      
       })   
    }
 
    handleDodajPV = (pitanje, vrsta) => {
-      console.log(pitanje,vrsta);    
       fetch('/api/pv', {
          method: 'post',
          headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify({ pitanje: pitanje, vrsta: vrsta })
       })
    };
+
+   handleChangePitanja = (e) => {
+      var id= e.target.value.split(".");
+      // eslint-disable-next-line
+      var selectedPitanje = this.state.bazaPitanja.filter(pitanje => pitanje.id_pitanja == id[0])[0];     
+      this.setState({ selectedPitanje })      
+   }
 //-----------------------------------------------------
    componentDidMount () {
       this.getVrsteList();
@@ -112,17 +114,22 @@ class Pitanja extends Component {
       } else {
          this.selectedCheckboxes.add(label);
       }
-      console.log(this.selectedCheckboxes)
    }
 
    render() {
       const checkboxes =  this.state.bazaVrste.map((vrsta, i) => 
       <div  key={i}>
-        <label>                     
+        <label style={{marginLeft:20 +'px'}}>                     
             <Input type="checkbox" onClick={this.toggleCheckbox} name="radioRole" onChange={this.toggleRadio} value={vrsta.id_vrste} key={vrsta.id_vrste} style={{opacity:1}} />
               {vrsta.naziv_vrste}                       
         </label>
       </div>)
+
+      let selectedObject;
+      if (this.state.selectedPitanje) {
+         selectedObject = <div className="red center"> {this.state.selectedPitanje.pitanje}</div>;
+      };
+
       return (
          <Container fluid className="centered">                 
             <Jumbotron>
@@ -144,14 +151,17 @@ class Pitanja extends Component {
                   <Col>
                      <h1 className="display-5">Pitanja</h1>             
                      <FormGroup>
-                        <Input type="select" onChange={this.handleChangeVrsta}>
+                        <Input type="select" onChange={this.handleChangePitanja}>
                            { this.state.pitanjaList.length === 0 && <option>Nisu još dodata pitanja.</option> }
                            { this.state.pitanjaList.length > 0 && <option>Selektuj pitanje.</option> }
-                           { this.state.pitanjaList.map((pitanje, i) => <option key={i}>{pitanje}</option>) }                 
+                           { this.state.bazaPitanja.map((pitanje, i) => <option key={i} id={pitanje.id_pitanja}>{pitanje.id_pitanja}. {pitanje.pitanje}</option>) }                 
                         </Input>             
                      </FormGroup>
                   </Col>
                </Row>
+            </Jumbotron>
+            <Jumbotron>
+               {selectedObject}
             </Jumbotron>   
          </Container>
       );

@@ -1,10 +1,9 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import SignedInLinks from './SignedInLinks';
 import SignedOutLinks from './SignedOutLinks';
 import AdminLinks from './adminLinks';
 const Navbar = (props)=> {
-   console.log(props)
   
    const { log_name, role} = props;
    const adLinks = role === 0  ?  <AdminLinks log_out={props.log_out}/> : null ;
@@ -15,8 +14,8 @@ const Navbar = (props)=> {
       <nav className="nav-wrapper green darken-3">
       
          <div className="container">
-            <Link to = '/' className="brand-logo">Anketa Project</Link> 
-            <div style={{textAlign: 'center',marginLeft:30 +'px'}}> { name }  { links } { adLinks }</div>           
+            <NavLink to = '/' className="brand-logo">Anketa Project</NavLink> 
+            <div style={{textAlign: 'right'}}> { name }  { links } { adLinks }</div>           
                       
          </div>
       </nav>

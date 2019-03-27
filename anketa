@@ -5,7 +5,7 @@
 -- Dumped from database version 10.6
 -- Dumped by pg_dump version 11.2
 
--- Started on 2019-03-20 08:41:39
+-- Started on 2019-03-25 15:47:57
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -97,7 +97,7 @@ ALTER TABLE public."ankete_pitanja-vrste_id_seq" OWNER TO postgres;
 CREATE TABLE public.ankete_pitanja_vrste (
     id_apv integer DEFAULT nextval('public."ankete_pitanja-vrste_id_seq"'::regclass) NOT NULL,
     anketa_id integer NOT NULL,
-    pv_id integer NOT NULL
+    pitanje_id integer NOT NULL
 );
 
 
@@ -286,6 +286,8 @@ ALTER TABLE public.vrste OWNER TO postgres;
 
 INSERT INTO public.ankete (id_ankete, naziv_ankete, vrsta_ankete, datum) VALUES (1, 'anketa 1', 1, '[2019-02-02,2019-03-12)');
 INSERT INTO public.ankete (id_ankete, naziv_ankete, vrsta_ankete, datum) VALUES (2, 'anketa 2', 2, '[2019-02-02,2019-03-12)');
+INSERT INTO public.ankete (id_ankete, naziv_ankete, vrsta_ankete, datum) VALUES (3, 'Anketa 3', 3, '[2019-01-21,2019-03-18)');
+INSERT INTO public.ankete (id_ankete, naziv_ankete, vrsta_ankete, datum) VALUES (4, 'Anketa 4', 1, '[2019-01-01,2019-01-31)');
 
 
 --
@@ -294,6 +296,20 @@ INSERT INTO public.ankete (id_ankete, naziv_ankete, vrsta_ankete, datum) VALUES 
 -- Data for Name: ankete_pitanja_vrste; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (2, 1, 4);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (3, 1, 1);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (4, 1, 3);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (5, 1, 6);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (6, 2, 7);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (7, 2, 3);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (8, 2, 10);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (9, 2, 1);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (10, 3, 8);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (11, 3, 9);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (12, 3, 10);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (13, 4, 3);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (14, 4, 9);
+INSERT INTO public.ankete_pitanja_vrste (id_apv, anketa_id, pitanje_id) VALUES (15, 4, 5);
 
 
 --
@@ -316,9 +332,8 @@ INSERT INTO public.cities (id, city_name) VALUES (14, 'Belgrade');
 -- Data for Name: korisnik; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.korisnik (id_korisnik, log_ime, password, vrsta_id, ime, prezime) VALUES (9, 'blob', 'b', 1, 'b', 'b');
-INSERT INTO public.korisnik (id_korisnik, log_ime, password, vrsta_id, ime, prezime) VALUES (17, 'klok', 'd', 3, 'fghdf', 'sd');
 INSERT INTO public.korisnik (id_korisnik, log_ime, password, vrsta_id, ime, prezime) VALUES (1, 'ivica.kopes@gmail.com', 'a', 0, 'Ivica', 'Kopes');
+INSERT INTO public.korisnik (id_korisnik, log_ime, password, vrsta_id, ime, prezime) VALUES (2, 'blob', 'b', 1, 'b', 'b');
 
 
 --
@@ -335,12 +350,16 @@ INSERT INTO public.korisnik (id_korisnik, log_ime, password, vrsta_id, ime, prez
 -- Data for Name: pitanja; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (7, 'Pitanje 6');
 INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (1, 'Pitanje 1');
 INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (2, 'Pitanje 2');
 INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (3, 'Pitanje 3');
 INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (4, 'Pitanje 4');
 INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (5, 'Pitanje 5');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (6, 'Pitanje 6');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (7, 'Pitanje 7');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (8, 'Pitanje 8');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (9, 'Pitanje 9');
+INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (10, 'Pitanje 10');
 
 
 --
@@ -349,11 +368,24 @@ INSERT INTO public.pitanja (id_pitanja, pitanje) VALUES (5, 'Pitanje 5');
 -- Data for Name: pitanja_vrste; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (1, 2, 4);
-INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (3, 3, 4);
-INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (4, 5, 4);
-INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (5, 6, 1);
-INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (6, 6, 4);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (1, 1, 1);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (2, 1, 2);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (4, 2, 3);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (5, 3, 3);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (6, 3, 1);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (7, 3, 2);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (8, 4, 1);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (9, 5, 1);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (10, 5, 2);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (11, 6, 1);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (12, 6, 2);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (13, 6, 3);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (14, 7, 2);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (15, 8, 3);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (16, 9, 3);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (17, 9, 1);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (18, 10, 3);
+INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (19, 10, 2);
 
 
 --
@@ -365,7 +397,6 @@ INSERT INTO public.pitanja_vrste (id_pv, pitanje_id, vrsta_id) VALUES (6, 6, 4);
 INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (1, 'Vrsta 1');
 INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (2, 'Vrsta 2');
 INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (3, 'Vrsta 3');
-INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (4, 'Vrsta 4');
 INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (0, 'admin');
 
 
@@ -375,7 +406,7 @@ INSERT INTO public.vrste (id_vrste, naziv_vrste) VALUES (0, 'admin');
 -- Name: ankete_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.ankete_id_seq', 1, false);
+SELECT pg_catalog.setval('public.ankete_id_seq', 4, true);
 
 
 --
@@ -384,7 +415,7 @@ SELECT pg_catalog.setval('public.ankete_id_seq', 1, false);
 -- Name: ankete_pitanja-vrste_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."ankete_pitanja-vrste_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."ankete_pitanja-vrste_id_seq"', 15, true);
 
 
 --
@@ -402,7 +433,7 @@ SELECT pg_catalog.setval('public.cities_id_seq', 14, true);
 -- Name: korisnik_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.korisnik_id_seq', 29, true);
+SELECT pg_catalog.setval('public.korisnik_id_seq', 2, true);
 
 
 --
@@ -420,7 +451,7 @@ SELECT pg_catalog.setval('public.odgovori_id_seq', 1, false);
 -- Name: pitanja_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.pitanja_id_seq', 533, true);
+SELECT pg_catalog.setval('public.pitanja_id_seq', 10, true);
 
 
 --
@@ -429,7 +460,7 @@ SELECT pg_catalog.setval('public.pitanja_id_seq', 533, true);
 -- Name: pitanja_vrste_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.pitanja_vrste_id_seq', 8, true);
+SELECT pg_catalog.setval('public.pitanja_vrste_id_seq', 19, true);
 
 
 --
@@ -438,7 +469,7 @@ SELECT pg_catalog.setval('public.pitanja_vrste_id_seq', 8, true);
 -- Name: vrsta_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vrsta_id_seq', 5, true);
+SELECT pg_catalog.setval('public.vrsta_id_seq', 4, true);
 
 
 --
@@ -522,7 +553,7 @@ ALTER TABLE ONLY public.vrste
 GRANT ALL ON DATABASE anketa TO ivek WITH GRANT OPTION;
 
 
--- Completed on 2019-03-20 08:41:39
+-- Completed on 2019-03-25 15:47:57
 
 --
 -- PostgreSQL database dump complete

@@ -20,10 +20,21 @@ router.get('/:anketa', (req, res) => {
   });
 });
 
-router.post('/', (req, res) => {
-  var anketa = req.body.anketa;
+router.get('/nepopunjene/:korisnik', (req, res) => {
+  var korisnik = req.params.korisnik;
+  Ankete.retrieveNepopunjeneAnkete(korisnik, (err, result) => {
+    if (err)
+      return res.json(err);
+    return res.json(result);
+  });
+});
 
-  Ankete.insert(anketa, (err, result) => {
+router.post('/', (req, res) => {
+  var naziv_ankete = req.body.naziv_ankete;
+  var datum = req.body.datum;
+  var vrsta_ankete = req.body.vrsta_ankete;
+
+  Ankete.insert(naziv_ankete, datum, vrsta_ankete, (err, result) => {
     if (err)
       return res.json(err);
     return res.json(result);

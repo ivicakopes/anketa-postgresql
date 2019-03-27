@@ -90,7 +90,7 @@ handleChange = (e) => {
     }
     const radio =  this.state.bazaVrste.map((vrsta, i) => 
       <div  key={i}>
-        <label onClick={this.handleRadio} value="vrsta.id_vrste">                     
+        <label onClick={this.handleRadio} value="vrsta.id_vrste" style={{marginLeft:40 +'px'}}>                     
             <Input type="radio" name="radioRole" onChange={this.toggleRadio} value={vrsta.id_vrste} key={vrsta.id_vrste} style={{opacity:1}} />
               {vrsta.naziv_vrste}                       
         </label>

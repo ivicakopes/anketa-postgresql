@@ -19,8 +19,16 @@ class Ankete {
     });
   }
 
-  static insert (anketa, callback) {
-    db.query('INSERT INTO ankete (anketa) VALUES ($1)', [anketa], (err, res) => {
+  static retrieveNepopunjeneAnkete (id,callback) {
+    db.query(`select * from ankete where id_ankete not in(SELECT distinct anketa_id from odgovori where korisnik_id = $1)`,[id],(err, res) => {
+      if (err.error)
+        return callback(err);
+      callback(res);
+    });
+  }
+
+  static insert (naziv, datum, uloga , callback) {
+    db.query('INSERT INTO ankete (naziv_ankete, datum, vrsta_ankete) VALUES ($1,$2,$3)', [naziv, datum, uloga], (err, res) => {
       if (err.error)
         return callback(err);
       callback(res);
@@ -29,3 +37,7 @@ class Ankete {
 }
 
 module.exports = Ankete;
+
+/* select * from ankete 
+where id_ankete not in(SELECT distinct anketa_id from odgovori 
+where korisnik_id =1) */

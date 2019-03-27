@@ -1,20 +1,20 @@
 var express = require('express');
-var PV = require('../models/pv');
+var APV = require('../models/apv');
 
 var router = express.Router();
 
 router.get('/', (req, res) => {
-  PV.retrieveAll((err, result) => {
+  APV.retrieveAll((err, result) => {
     if (err)
       return res.json(err);
     return res.json(result);
   });
 });
 
-router.get('/:pitanje/:vrsta', (req, res) => {
-  var vrsta = req.params.vrsta;
+router.get('/:anketa/:pitanje', (req, res) => {
+  var anketa = req.params.anketa;
   var pitanje = req.params.pitanje;
-  PV.retrieveAPVByPitanjeAndVrsta( pitanje, vrsta, (err, result) => {
+  APV.retrieveAPVByAnketaAndPitanje( anketa, pitanje, (err, result) => {
     if (err)
       return res.json(err);
     return res.json(result);
@@ -23,8 +23,8 @@ router.get('/:pitanje/:vrsta', (req, res) => {
 
 router.post('/', (req, res) => {
   var pitanje = req.body.pitanje;
-  var vrsta = req.body.vrsta;  
-  PV.insert(pitanje, vrsta, (err, result) => {
+  var anketa = req.body.anketa;
+  APV.insert( anketa, pitanje, (err, result) => {
     if (err)
       return res.json(err);
     return res.json(result);

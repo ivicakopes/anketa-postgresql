@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 
 class SignIn extends Component {
   constructor(props) {
@@ -6,6 +7,7 @@ class SignIn extends Component {
     this.state = {
       log_name:'',
       password:'',
+      logovan: false,
       role:''
     }
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,10 +20,16 @@ class SignIn extends Component {
   }
   handleSubmit = (e) => { 
     e.preventDefault(this.state);   
-    this.props.change(this.state.log_name, this.state.password);      
+    this.props.change(this.state.log_name, this.state.password);
+    this.setState ({
+      logovan: true
+    });      
   }
 
   render() {
+    if (this.state.logovan) {
+      return <Redirect to='/' />
+    }
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit} className="white" style={{padding : 20 }}>

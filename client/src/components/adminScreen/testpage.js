@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 
 import {
   Container,
-  Row,
-  Jumbotron,
+  Row, 
   FormGroup,
   Input,
   Col
@@ -27,8 +26,8 @@ class Ankete extends Component {
          noviDatumZavršetka: null,
          roleSelected: 1
       };
-      this.getPitanjaListPoAnketi=this.getPitanjaListPoAnketi.bind(this);
-      this.getPitanjaListPoVrsti=this.getPitanjaListPoVrsti.bind(this);
+     // this.getPitanjaListPoAnketi=this.getPitanjaListPoAnketi.bind(this);
+     // this.getPitanjaListPoVrsti=this.getPitanjaListPoVrsti.bind(this);
       //this.handleChangeAnketa = this.handleChangeAnketa.bind(this);
     }
         
@@ -38,6 +37,7 @@ class Ankete extends Component {
       .then(res => {    
          var bazaPitanja = res;
          var pitanjaList = res.map(r => r.pitanje);
+         console.log("pitanjaList");
          console.log("baza");
          console.log(bazaPitanja);
          this.setState({ 
@@ -46,6 +46,7 @@ class Ankete extends Component {
             pitanjaUAnketi: []
           })
       })
+      return
    };
 
    getPitanjaListPoAnketi(anketa){
@@ -59,6 +60,7 @@ class Ankete extends Component {
             bazaPitanjaAnketa,
           })
       })
+      return
    }
 
    getAnketeList = () => {
@@ -81,31 +83,7 @@ class Ankete extends Component {
          var vrsteList = res.map(r => r.naziv_vrste);
          this.setState({ vrsteList });         
       });
-   };
-
-   handleInputChangeNazivAnkete = (e) => {
-      this.setState({ noviNazivAnkete: e.target.value });
-   };
-
-   handleInputChangeDatumPočetka = (e) => {
-      this.setState({ noviDatumPočetka: e.target.value });
-   };
-
-   handleInputChangeDatumZavršetka = (e) => {
-      this.setState({ noviDatumZavršetka: e.target.value });
-   };
-
-   handleDodajAnketu = () => {
-      fetch('/api/ankete', {
-         method: 'post',
-         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify({ 
-            naziv_ankete: this.state.noviNazivAnkete,
-            datum: "[" + this.state.noviDatumPočetka + "," + this.state.noviDatumZavršetka + ")",
-            vrsta_ankete: this.state.roleSelected
-          })
-      })      
-   }
+   };  
 
    handleChangeAnketa = (e) => {
       var id= e.target.value.split(".");
@@ -153,19 +131,10 @@ class Ankete extends Component {
                   this.setState({
                      bazaPitanja
                   })        
-               }) 
-         })
-      }       
+      }) 
+    })
+   }       
    }   
-
-   toggleRadio (){}
-
-   handleRadio = (e) => {
-      console.log(e);
-      var roleSelected = e.target.value;
-      if(roleSelected !== undefined) 
-         this.setState ({ roleSelected })
-   } 
    
    handleUbaciPitanjeUAnketu(i){
       var newArrAnketa = this.state.pitanjaUAnketi;
@@ -215,18 +184,9 @@ class Ankete extends Component {
    componentDidMount () {
       this.getVrsteList();
       this.getAnketeList();
-   }
-
-   
+   }   
 
    render() {
-      const radio =  this.state.bazaVrste.map((vrsta, i) => 
-      <div  key={i}>
-        <label onClick={this.handleRadio} value="vrsta.id_vrste" style={{marginLeft:20 +'px'}}>                     
-            <Input type="radio" name="radioRole" onChange={this.toggleRadio} value={vrsta.id_vrste} key={vrsta.id_vrste} style={{opacity:1}} />
-              {vrsta.naziv_vrste}                       
-        </label>
-      </div>);
 
       let selectedObject;
       if (this.state.selectedAnketa) {
@@ -237,7 +197,7 @@ class Ankete extends Component {
                {pitanja.id_pitanja}. {pitanja.pitanje}
                <button className="btn-primary  right" style={{padding:0 + "," + 0 }} id={pitanja.id_pitanja} onClick={()=>this.handleUbaciPitanjeUAnketu(i)}>+</button>
             </div>);
-         
+        // console.log(this.state.pitanjaUAnketi);
          var pitanjaUanketi = this.state.pitanjaUAnketi.map((pitanja, i) => 
            <div className="yellow" key={i} style={{margin:15 +'px'}}>
               {pitanja.id_pitanja}. {pitanja.pitanje}
@@ -249,73 +209,24 @@ class Ankete extends Component {
          if (this.state.pitanjaUAnketi.length > 0){
             dugmeSubmit = 
             <div>
-               <button className="btn-primary " style={{padding:0 + "," + 0}}  onClick={this.handleSnimiAnketuSaPitanjima}>snimi anketu</button>
+               <button className="btn-primary " style={{padding:0 + "," + 0}}  onClick={() => this.handleSnimiAnketuSaPitanjima}>snimi anketu</button>
           </div>
          }
          selectedObject = 
             <div>
                <div className="red center"> {this.state.selectedAnketa.naziv_ankete} ---> {this.state.bazaVrste[this.state.selectedAnketa.vrsta_ankete-1].naziv_vrste}
             </div><br/>         
-            <div className="blue center">
-               {datumi[0]} do {datumi[1]}
-            </div><br/>
+            <div className="blue center">{datumi[0]} do {datumi[1]}</div><br/>
             <Row>
-               <Col>
-                  <div>
-                     moguća pitanja  
-                  </div>
-                  <div>
-                     {pitanja}  
-                  </div>    
-               </Col>
-               <Col>
-                  <div>
-                     pitanja u anketi
-                  </div>
-                  <div>
-                     {pitanjaUanketi}  
-                  </div> 
-                  {dugmeSubmit}
-
-               </Col>
-            </Row>
-                      
+               <Col><div>moguća pitanja</div> <div>{pitanja} </div> </Col>
+               <Col><div>pitanja u anketi</div><div> {pitanjaUanketi} </div>{dugmeSubmit}</Col>
+            </Row>                      
          </div>; 
        };
 
       return (
-         <Container fluid className="centered">                 
-            <Jumbotron>
-               <Row>
-                  <Col>
-                     <form onSubmit={this.handleDodajAnketu}  style={{padding : 20 }}>
-                        <FormGroup>
-                           <Input 
-                              placeholder="Nova anketa ..."
-                              value={this.state.novoPitanje}
-                              onChange={this.handleInputChangeNazivAnkete}
-                              required
-                           /><br/> 
-                           
-                           <Input 
-                              placeholder="Datum početka ( yyyy-mm-dd ) ..."
-                              value={this.state.novoPitanje}
-                              onChange={this.handleInputChangeDatumPočetka}
-                              required
-                           />  
-                           <Input 
-                              placeholder="Datum završetka ( yyyy-mm-dd ) ..."
-                              value={this.state.novoPitanje}
-                              onChange={this.handleInputChangeDatumZavršetka}
-                              required
-                           />                
-                           { radio }  
-                        </FormGroup>
-                        <div className="input-field">
-                           <button className="btn btn-primary z-depth-0">dodaj</button>
-                        </div> 
-                     </form>                     
-                  </Col>
+         <Container fluid className="centered">  
+               <Row>                  
                   <Col>
                      <h1 className="display-5">Ankete</h1>             
                      <FormGroup>
@@ -326,12 +237,8 @@ class Ankete extends Component {
                         </Input>             
                      </FormGroup>
                   </Col>
-               </Row>
-            </Jumbotron> 
-            <Jumbotron>
+               </Row> 
                {selectedObject}
-            </Jumbotron>
-
          </Container>
       );
    }

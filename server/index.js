@@ -17,6 +17,8 @@ app.use('/api/pitanja', require('./api/pitanja'));
 app.use('/api/pv', require('./api/pv'));
 app.use('/api/korisnik', require('./api/korisnik'));
 app.use('/api/ankete', require('./api/ankete'));
+app.use('/api/apv', require('./api/apv'));
+app.use('/api/odgovori', require('./api/odgovori'));
 
 if (ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
