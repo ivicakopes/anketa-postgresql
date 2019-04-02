@@ -215,9 +215,7 @@ class Ankete extends Component {
    componentDidMount () {
       this.getVrsteList();
       this.getAnketeList();
-   }
-
-   
+   }  
 
    render() {
       const radio =  this.state.bazaVrste.map((vrsta, i) => 

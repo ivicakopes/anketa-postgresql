@@ -11,9 +11,17 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/ankete', (req, res) => {
+  Odgovori.retrieveOdgovoriByAnkete((err, result) => {
+    if (err)
+      return res.json(err);
+    return res.json(result);
+  });
+});
+
 router.get('/:anketa', (req, res) => {
   var odgovor = req.params.odgovor;
-  Odgovori.retrieveAnketaById(odgovor, (err, result) => {
+  Odgovori.retrieveOdgovorById(odgovor, (err, result) => {
     if (err)
       return res.json(err);
     return res.json(result);

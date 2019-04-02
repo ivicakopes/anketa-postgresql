@@ -130,7 +130,7 @@ class Dashboard extends Component {
       if(!this.props.userId){ 
          return (<div> Morate se prijaviti </div>) 
       }else{
-         if(this.state.bazaAnketa.length == 0) {
+         if(this.state.bazaAnketa.length === 0) {
          this.getNepopunjeneAnketeList();
       }}
       let dropdown = 
@@ -146,23 +146,23 @@ class Dashboard extends Component {
          var pitanjaUanketi = this.state.pitanjaUAnketi.map((pitanja, i) => 
            <div className="yellow" key={i} style={{margin:15 +'px'}}> {pitanja.id_pitanja}. {pitanja.pitanje}
               <span className="right">
-                  <label onClick={this.handleRadioChange} value="v1" style={{marginLeft:20 +'px'}}>ocena 1
+                  <label onClick={this.handleRadioChange} style={{marginLeft:20 +'px'}}>ocena 1
                      <input type="radio" name={i} value="1" style={{position:'relative', opacity:1,marginRight:30 + 'px',marginLeft:5 + 'px'}}
                       onChange={this.toggleRadio} checked={this.state.pitanjaUAnketi[i].odgovor === '1'}  />
                   </label>
-                  <label onClick={this.handleRadioChange} value="v1" style={{marginLeft:20 +'px'}}>ocena 2
+                  <label onClick={this.handleRadioChange} style={{marginLeft:20 +'px'}}>ocena 2
                      <input type="radio" name={i} value="2" style={{position:'relative', opacity:1,marginRight:30 + 'px',marginLeft:5 + 'px'}} 
                      onChange={() => this.toggleRadio} checked={this.state.pitanjaUAnketi[i].odgovor === '2'}  />
                   </label> 
-                  <label onClick={this.handleRadioChange} value="v1" style={{marginLeft:20 +'px'}}>ocena 3 
+                  <label onClick={this.handleRadioChange} style={{marginLeft:20 +'px'}}>ocena 3 
                      <input type="radio" name={i} value="3" style={{position:'relative', opacity:1,marginRight:30 + 'px',marginLeft:5 + 'px'}} 
                      onChange={() => this.toggleRadio} checked={this.state.pitanjaUAnketi[i].odgovor === '3'}  />
                   </label> 
-                  <label onClick={this.handleRadioChange} value="v1" style={{marginLeft:20 +'px'}}>ocena 4 
+                  <label onClick={this.handleRadioChange} style={{marginLeft:20 +'px'}}>ocena 4 
                      <input type="radio" name={i} value="4" style={{position:'relative', opacity:1,marginRight:30 + 'px',marginLeft:5 + 'px'}} 
                      onChange={() => this.toggleRadio} checked={this.state.pitanjaUAnketi[i].odgovor === '4'}  />
                   </label> 
-                  <label onClick={this.handleRadioChange} value="v1" style={{marginLeft:20 +'px'}}>ocena 5 
+                  <label onClick={this.handleRadioChange} style={{marginLeft:20 +'px'}}>ocena 5 
                      <input type="radio" name={i} value="5" style={{position:'relative', opacity:1,marginRight:30 + 'px',marginLeft:5 + 'px'}} 
                      onChange={() => this.toggleRadio} checked={this.state.pitanjaUAnketi[i].odgovor === '5'}  />
                   </label>
