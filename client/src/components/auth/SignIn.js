@@ -14,16 +14,13 @@ class SignIn extends Component {
   }
    
   handleChange = (e) => { 
-    this.setState ({
-        [e.target.id]:e.target.value
-    })
+    this.setState ({ [e.target.id]:e.target.value })
   }
+
   handleSubmit = (e) => { 
     e.preventDefault(this.state);   
     this.props.change(this.state.log_name, this.state.password);
-    this.setState ({
-      logovan: true
-    });      
+    this.setState ({ logovan: true });      
   }
 
   render() {

@@ -16,7 +16,6 @@ class Pitanja extends Component {
       super(props);
     
       this.state = {
-         vrsteList: [],
          bazaVrste:[],
          novoPitanje: '',
          pitanjeSaId: null,
@@ -29,32 +28,22 @@ class Pitanja extends Component {
    getPitanjaList = () => {
       fetch('/api/pitanja')
       .then(res => res.json())
-      .then(res => {      
-         var bazaPitanja = res;
-         this.setState({ bazaPitanja });
-         var pitanjaList = res.map(r => r.pitanje);
-         this.setState({ pitanjaList });      
-      });
-   };
+      .then(res => this.setState({ bazaPitanja: res }))
+   }
 
    getPitanjeByTekst = () => {
       var pit = this.state.novoPitanje;
       fetch(`/api/pitanja/${pit}`)
       .then(res =>res.json())
       .then(pitanjeSaId => {   
-         this.setState({ pitanjeSaId });         
+         this.setState({ pitanjeSaId })         
       });
-   };
+   }
 
    getVrsteList = () => {
       fetch('/api/vrste/bezAdmina')
       .then(res => res.json())    
-      .then(res => {
-         var bazaVrste = res;
-         this.setState({ bazaVrste });
-         var vrsteList = res.map(r => r.naziv_vrste);
-         this.setState({ vrsteList });         
-      });
+      .then(res => this.setState({ bazaVrste: res }))
    };
 //-----------------------------------------------------
    handleInputChange = (e) => {
@@ -64,7 +53,6 @@ class Pitanja extends Component {
    handleInputChangePitanje = (e) => {
       this.setState({ novoPitanje: e.target.value });
    };
-
 
    handleDodajPitanje = () => {
       fetch('/api/pitanja', {
@@ -152,8 +140,8 @@ class Pitanja extends Component {
                      <h1 className="display-5">Pitanja</h1>             
                      <FormGroup>
                         <Input type="select" onChange={this.handleChangePitanja}>
-                           { this.state.pitanjaList.length === 0 && <option>Nisu još dodata pitanja.</option> }
-                           { this.state.pitanjaList.length > 0 && <option>Selektuj pitanje.</option> }
+                           { this.state.bazaPitanja.length === 0 && <option>Nisu još dodata pitanja.</option> }
+                           { this.state.bazaPitanja.length > 0 && <option>Selektuj pitanje.</option> }
                            { this.state.bazaPitanja.map((pitanje, i) => <option key={i} id={pitanje.id_pitanja}>{pitanje.id_pitanja}. {pitanje.pitanje}</option>) }                 
                         </Input>             
                      </FormGroup>

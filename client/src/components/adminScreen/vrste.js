@@ -18,7 +18,6 @@ class Vrste extends Component {
       super(props);
       
       this.state = {
-         vrsteList: [],
          bazaVrste:[],
          novaVrstaNaziv: '',
          selectedVrsta: null
@@ -28,17 +27,12 @@ class Vrste extends Component {
    getVrsteList = () => {
       fetch('/api/vrste/bezAdmina')
       .then(res => res.json())    
-      .then(res => {
-         var bazaVrste = res;
-         this.setState({ bazaVrste });
-         var vrsteList = res.map(r => r.naziv_vrste);
-         this.setState({ vrsteList });         
-      });
-   };
+      .then(res => this.setState({ bazaVrste: res }))
+   }
 
    handleInputChangeVrste = (e) => {
       this.setState({ novaVrstaNaziv: e.target.value });
-   };     
+   }    
 
    handleDodajVrstu = () => {
       fetch('/api/vrste', {
@@ -47,11 +41,11 @@ class Vrste extends Component {
          body: JSON.stringify({ vrste: this.state.novaVrstaNaziv })
       })
       .then(res => res.json())
-      .then(res => {
+      .then(() => {
          this.getVrsteList();
          this.setState({ novaVrstaNaziv: '' });
-      });
-   }; 
+      })
+   } 
 
    handleChangeVrsta = (e) => {
       var id= e.target.value.split(".");
@@ -90,8 +84,8 @@ class Vrste extends Component {
                      <h1 className="display-5">Vrste korisnika</h1>
                      <FormGroup>
                         <Input type="select" onChange={this.handleChangeVrsta}>
-                           { this.state.vrsteList.length === 0 && <option>Nisu još dodate vrste.</option> }
-                           { this.state.vrsteList.length > 0 && <option>Selektuj vrstu.</option> }
+                           { this.state.bazaVrste.length === 0 && <option>Nisu još dodate vrste.</option> }
+                           { this.state.bazaVrste.length > 0 && <option>Selektuj vrstu.</option> }
                            { this.state.bazaVrste.map((vrsta, i) => <option key={i} id={vrsta.id_vrste}>{vrsta.id_vrste}. {vrsta.naziv_vrste}</option>) }                 
                         </Input>             
                      </FormGroup>            

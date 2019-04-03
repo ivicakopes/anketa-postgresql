@@ -14,7 +14,6 @@ class Dashboard extends Component {
       super(props);
     
       this.state = {
-         vrsteList: [],
          bazaVrste:[],
          bazaPitanja: [],
          pitanjaUAnketi: [],
@@ -41,12 +40,7 @@ class Dashboard extends Component {
    getVrsteList = () => {
       fetch('/api/vrste/bezAdmina')
       .then(res => res.json())    
-      .then(res => {
-         var bazaVrste = res;
-         this.setState({ bazaVrste });
-         var vrsteList = res.map(r => r.naziv_vrste);
-         this.setState({ vrsteList });         
-      });
+      .then(res => this.setState({ bazaVrste: res }))
    };    
 
    handleChangeAnketa = (e) => {
@@ -81,9 +75,7 @@ class Dashboard extends Component {
       if(e.target.value !== undefined) {
          var selectedOption = this.state.pitanjaUAnketi;
          selectedOption[e.target.name].odgovor = e.target.value;
-         this.setState({
-            pitanjaUAnketi: selectedOption
-         });
+         this.setState({ pitanjaUAnketi: selectedOption });
       };
    }
 
@@ -93,7 +85,6 @@ class Dashboard extends Component {
 
    handleSubmit = (e) => {
       e.preventDefault();
-      console.log(e.target);
       for (const pitanje of this.state.pitanjaUAnketi){
          this.snimiOdgovore(pitanje.id_pitanja, pitanje.odgovor)
       }
@@ -101,8 +92,7 @@ class Dashboard extends Component {
       this.setState({
          selectedAnketa: null,
          selAn: "Selektuj anketu"
-      });
-      
+      });      
    }
 
    snimiOdgovore(pitanje, odgovor){
@@ -118,12 +108,8 @@ class Dashboard extends Component {
       }) 
    }
 
-
    componentDidMount () {
-      this.getVrsteList();
-      //this.getNepopunjeneAnketeList();      
-      //console.log(this.props);
-      
+      this.getVrsteList();      
    }   
 
    render() { 
@@ -193,11 +179,9 @@ class Dashboard extends Component {
                <form onSubmit = {this.handleSubmit}>
                   {pitanjaUanketi}  
                    {dugmeSubmit}
-               </form> 
-              
+               </form>               
                </Col>               
-            </Row> 
-                      
+            </Row>                       
          </div>; 
        };
 
@@ -216,7 +200,6 @@ class Dashboard extends Component {
             <Jumbotron>
                {selectedObject}
             </Jumbotron>
-
          </Container>
       );
    }

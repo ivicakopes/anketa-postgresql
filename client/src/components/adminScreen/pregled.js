@@ -22,18 +22,15 @@ class Pregled extends Component {
          bazaAnketa: [],
          selectedAnketa: null,
          selectedPregled: null,
-         bazaOdgovori: null
+         bazaOdgovori: null  // na pitanje broj odgovora po oceni 
       };
     }
    
     getKorisniciList = () => {
       fetch('/api/korisnik')
       .then(res => res.json())
-      .then(res => {      
-         var bazaKorisnika = res;
-         this.setState({ bazaKorisnika });    
-      });
-   }; 
+      .then(res => this.setState({ bazaKorisnika: res }))
+   } 
 
    getPitanjaList = () => {
       fetch('/api/pitanja')
@@ -91,46 +88,81 @@ class Pregled extends Component {
       this.getKorisniciList();
       this.getOdgovoriPoAnketi();
    } 
-   
-   nista(){
-      console.log("nista")
-   }
 
-   tabelaA = () => {
-      
+   tabelaP = () => {
       var niz = this.state.bazaOdgovori;
-      if (!niz) {
-         return};
+      if (!niz) return ;
       var celaTabela;
-      for(let i = 0 ; i < this.state.bazaAnketa.length ; i++){
+      for(let i = 0 ; i < this.state.bazaPitanja.length ; i++){
          // eslint-disable-next-line
-         celaTabela = [celaTabela, this.grupaUtabeli(niz.filter(poAnketi => poAnketi.anketa_id == this.state.bazaAnketa[i].id_ankete))]
-         console.log(this.grupaUtabeli(niz.filter(poAnketi => poAnketi.anketa_id == this.state.bazaAnketa[i].id_ankete)));
-      }  
-      /* var a =  this.proba(); 
-      console.log("prvo a "); 
-      console.log(a); 
-      a = [a,this.proba()];   
-      a = [a,this.proba()];  */  
+         celaTabela = [celaTabela, this.grupaUtabeliP(niz.filter(poPitanju => poPitanju.pitanje_id == this.state.bazaPitanja[i].id_pitanja),this.state.bazaPitanja[i].pitanje)]
+      } 
       return celaTabela
    }
 
-   proba(){
-      return (<div><div>bla</div><div>bla</div></div>)
-   }
-   
-   grupaUtabeli(niz){
-      console.log(niz);     
-      var nazivGrupe = this.state.bazaAnketa[niz[0].anketa_id-1].naziv_ankete;
-      console.log(nazivGrupe);
-      var grupa ; 
-      
-      for(let i=0 ; i<niz.length ; i+=6){
-         // eslint-disable-next-line
-         grupa = [grupa, this.redUtabeli(niz.filter(poPitanju => poPitanju.pitanje_id == niz[i].pitanje_id))]
+   grupaUtabeliP(niz, nazivGrupe){
+      var poruka = nazivGrupe + " Nije odgovarano na ovo pitanje !" 
+      var grupa ;
+      if(niz.length !== 0) { 
+         poruka = nazivGrupe;               
+         for(let i=0 ; i<niz.length ; i+=6){
+            // eslint-disable-next-line
+            grupa = [grupa, this.redUtabeliP(niz.filter(poAnketi => poAnketi.anketa_id == niz[i].anketa_id))]
+         }
       }
       return(
-         <table className="table blue">
+         <table className="table blue table-bordered">
+            <tr>
+               <th colspan="7" style={{textAlign: "center"}}>{poruka}</th>
+            </tr>
+            <tr>
+               <th>ankete \ ocena</th>
+               <th>0</th>
+               <th>1</th>
+               <th>2</th>
+               <th>3</th>
+               <th>4</th>
+               <th>5</th>
+            </tr>
+            {grupa} 
+         </table> 
+      )
+   }
+
+   redUtabeliP(niz){
+      if (!niz) return ;
+      var clan = this.state.bazaAnketa.filter(anketa => anketa.id_ankete == niz[0].anketa_id)[0].naziv_ankete;
+      var red;          
+      for(let i=0 ; i<6 ; i++){
+        red =[red, <td>{niz[i].suma}</td>]
+      }      
+      return(
+         <tr>
+            <td>{clan}</td>
+            {red}
+         </tr>
+      )
+   }
+
+   tabelaA = () => {      
+      var niz = this.state.bazaOdgovori;
+      if (!niz) return ;
+      var celaTabela;
+      for(let i = 0 ; i < this.state.bazaAnketa.length ; i++){
+         // eslint-disable-next-line
+         celaTabela = [celaTabela, this.grupaUtabeliA(niz.filter(poAnketi => poAnketi.anketa_id == this.state.bazaAnketa[i].id_ankete),this.state.bazaAnketa[i].naziv_ankete)]
+      } 
+      return celaTabela
+   }
+   
+   grupaUtabeliA(niz, nazivGrupe){ 
+      var grupa ;       
+      for(let i=0 ; i<niz.length ; i+=6){
+         // eslint-disable-next-line
+         grupa = [grupa, this.redUtabeliA(niz.filter(poPitanju => poPitanju.pitanje_id == niz[i].pitanje_id))]
+      }
+      return(
+         <table className="table blue table-bordered">
             <tr>
                <th colspan="7" style={{textAlign: "center"}}>{nazivGrupe}</th>
             </tr>
@@ -148,11 +180,8 @@ class Pregled extends Component {
       )
    }
 
-   redUtabeli(niz){ 
-      console.log("red u tabeli niz");
-      console.log(niz);
-      console.log(this.state.bazaPitanja[niz[0].pitanje_id-1]);
-      const clan = this.state.bazaPitanja[niz[0].pitanje_id-1].pitanje;
+   redUtabeliA(niz){
+      var clan = this.state.bazaPitanja.filter(pitanje => pitanje.id_pitanja == niz[0].pitanje_id)[0].pitanje;
       var red;          
       for(let i=0 ; i<6 ; i++){
         red =[red, <td>{niz[i].suma}</td>]
@@ -165,31 +194,28 @@ class Pregled extends Component {
       )
    }  
 
+   tabelaK = () => {      
+      var niz = this.state.bazaOdgovori;
+      /* if (!niz) return ;
+      var celaTabela;
+      for(let i = 0 ; i < this.state.bazaAnketa.length ; i++){
+         // eslint-disable-next-line
+         celaTabela = [celaTabela, this.grupaUtabeliA(niz.filter(poAnketi => poAnketi.anketa_id == this.state.bazaAnketa[i].id_ankete),this.state.bazaAnketa[i].naziv_ankete)]
+      } 
+         return celaTabela */
+         console.log(niz);
+         return 
+   }
+
    render() {
       let selectedObject;
       if (this.state.selectedPitanje) {
          selectedObject = <div className="red center"> {this.state.selectedPitanje.pitanje}</div>;
       };
 
-      var pitanja = this.state.bazaPitanja.map((pitanja, i) => 
-         <div className="yellow" style={{margin:10 +'px'}} key={i}>
-            {pitanja.id_pitanja}. {pitanja.pitanje}
-            <button className="btn-primary  right" style={{padding:0 + "," + 0 }} id={pitanja.id_pitanja} onClick={()=>this.nista}>+</button>
-         </div>);
-
+      var pitanja = this.tabelaP();
       var ankete = this.tabelaA();
-      console.log(ankete);
-     /*  var ankete = this.state.bazaAnketa.map((anketa, i) => 
-         <div className="yellow" style={{margin:10 +'px'}} key={i}>
-            {anketa.id_ankete}. {anketa.naziv_ankete}
-            <button className="btn-primary  right" style={{padding:0 + "," + 0 }} id={anketa.id_ankete} onClick={()=>this.nista}>+</button>
-         </div>); */   
-
-      var korisnici = this.state.bazaKorisnika.map((korisnik, i) => 
-         <div className="yellow" style={{margin:10 +'px'}} key={i}>
-            {korisnik.id_korisnik}. {korisnik.log_ime}
-            <button className="btn-primary  right" style={{padding:0 + "," + 0 }} id={korisnik.id_korisnik} onClick={()=>this.nista}>+</button>
-         </div>); 
+      var korisnici = this.tabelaK();
          
       if(this.state.selectedPregled === "p")selectedObject = pitanja; 
       if(this.state.selectedPregled === "a")selectedObject = ankete;

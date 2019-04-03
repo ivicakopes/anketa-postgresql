@@ -32,13 +32,8 @@ componentDidMount () {
 getVrsteList = () => {
   fetch('/api/vrste/bezAdmina')
   .then(res => res.json())    
-  .then(res => {
-    var bazaVrste = res;
-    this.setState({ bazaVrste });
-    var vrsteList = res.map(r => r.naziv_vrste);
-    this.setState({ vrsteList });
-  });
-};
+  .then(res => this.setState({ bazaVrste: res }))
+}
 
 handleSubmit = (e) => {
   e.preventDefault();
@@ -59,9 +54,7 @@ handleSubmit = (e) => {
         })
       });
       this.props.change(this.state.log_name, this.state.password);
-      this.setState ({
-        logovan: true
-      });
+      this.setState ({ logovan: true });
     }
   })
 }
@@ -75,9 +68,7 @@ handleRadio = (e) => {
 toggleRadio (){}
 
 handleChange = (e) => {
-  this.setState ({
-      [e.target.id]:e.target.value
-  })
+  this.setState ({ [e.target.id]:e.target.value })
 }
 
   render() {
@@ -116,12 +107,7 @@ handleChange = (e) => {
                <div className="input-field">
                    <label htmlFor="lastName">Prezime</label>
                    <input type="text" id="prezime" onChange={this.handleChange} required/>
-               </div> 
-
-               
-               <div>
-                             
-               </div>              
+               </div>             
                <div className="input-field">
                   <button className="btn pink lighten-1 z-depth-0">Sign Up</button>
                </div> 

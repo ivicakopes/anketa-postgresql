@@ -14,12 +14,10 @@ class Ankete extends Component {
       super(props);
     
       this.state = {
-         vrsteList: [],
          bazaVrste:[],
          bazaPitanja: [],
          pitanjaUAnketi: [],
          anketaSaId: null,
-         anketeList: [],
          bazaAnketa: [],
          selectedAnketa: null,
          noviNazivAnkete: null,
@@ -29,7 +27,6 @@ class Ankete extends Component {
       };
       this.getPitanjaListPoAnketi=this.getPitanjaListPoAnketi.bind(this);
       this.getPitanjaListPoVrsti=this.getPitanjaListPoVrsti.bind(this);
-      //this.handleChangeAnketa = this.handleChangeAnketa.bind(this);
     }
         
    getPitanjaListPoVrsti(vrsta){
@@ -37,12 +34,8 @@ class Ankete extends Component {
       .then(res => res.json())
       .then(res => {    
          var bazaPitanja = res;
-         var pitanjaList = res.map(r => r.pitanje);
-         console.log("baza");
-         console.log(bazaPitanja);
          this.setState({ 
-            bazaPitanja,
-            pitanjaList,
+            bazaPitanja,           
             pitanjaUAnketi: []
           })
       })
@@ -51,36 +44,19 @@ class Ankete extends Component {
    getPitanjaListPoAnketi(anketa){
       fetch(`/api/pitanja/anketa/${anketa}`)
       .then(res => res.json())
-      .then(res => {    
-         var bazaPitanjaAnketa = res;
-         console.log("anketa");
-         console.log(bazaPitanjaAnketa);
-         this.setState({ 
-            bazaPitanjaAnketa,
-          })
-      })
+      .then(res => this.setState({ bazaPitanjaAnketa :res }))
    }
 
    getAnketeList = () => {
       fetch('/api/ankete')
       .then(res => res.json())
-      .then(res => {      
-         var bazaAnketa = res;
-         this.setState({ bazaAnketa });
-         var anketeList = res.map(r => r.naziv_ankete);
-         this.setState({ anketeList });      
-      })
+      .then(res => this.setState({ bazaAnketa: res }))
    }
    
    getVrsteList = () => {
       fetch('/api/vrste/bezAdmina')
       .then(res => res.json())    
-      .then(res => {
-         var bazaVrste = res;
-         this.setState({ bazaVrste });
-         var vrsteList = res.map(r => r.naziv_vrste);
-         this.setState({ vrsteList });         
-      });
+      .then(res => this.setState({ bazaVrste: res }))
    };
 
    handleInputChangeNazivAnkete = (e) => {
@@ -113,47 +89,28 @@ class Ankete extends Component {
       var selectedAnketa = this.state.bazaAnketa.filter(anketa => anketa.id_ankete == id[0])[0]; 
       this.setState({ selectedAnketa });
       if(selectedAnketa){
-      console.log("1.change anketa to  " + selectedAnketa.id_ankete);
-      fetch(`/api/pitanja/anketa/${selectedAnketa.id_ankete}`)
+         fetch(`/api/pitanja/anketa/${selectedAnketa.id_ankete}`)
          .then(res => res.json())
-         .then(res => {    
-            var pitanjaUAnketi = res;
-            console.log("anketa");
-            console.log(pitanjaUAnketi);
-            this.setState({ 
-               pitanjaUAnketi,
-            })
-         }) 
+         .then(res => this.setState({ pitanjaUAnketi: res })) 
          .then(() => {
             fetch(`/api/pitanja/vrsta/${selectedAnketa.vrsta_ankete}`)
-               .then(res => res.json())
-               .then(res => {    
-                  var bazaPitanja = res;
-                  console.log("baza");
-                  console.log(bazaPitanja);
-                  this.setState({ 
-                     bazaPitanja
-                  })   
-               }) 
-               .then(() => {
-                  console.log("2.change anketa to  " + selectedAnketa.id_ankete);  
-                  const bazaPitanja = this.state.bazaPitanja.filter(item => {
-                     var ppp = this.state.pitanjaUAnketi.filter(pitanje => {
-                        // eslint-disable-next-line
-                        return pitanje.id_pitanja == item.id_pitanja
-                     }) 
-                     if (ppp[0]){
-                        return false;
-                     }
-                     else{
-                        return true
-                     }
-                    
-                  })                         
-                  this.setState({
-                     bazaPitanja
-                  })        
-               }) 
+            .then(res => res.json())
+            .then(res => this.setState({ bazaPitanja: res })) 
+            .then(() => {
+               const bazaPitanja = this.state.bazaPitanja.filter(item => {
+                  var ppp = this.state.pitanjaUAnketi.filter(pitanje => {
+                     // eslint-disable-next-line
+                     return pitanje.id_pitanja == item.id_pitanja
+                  }) 
+                  if (ppp[0]){
+                     return false;
+                  }
+                  else{
+                     return true
+                  }                    
+               })                         
+               this.setState({ bazaPitanja })        
+            }) 
          })
       }       
    }   
@@ -161,7 +118,6 @@ class Ankete extends Component {
    toggleRadio (){}
 
    handleRadio = (e) => {
-      console.log(e);
       var roleSelected = e.target.value;
       if(roleSelected !== undefined) 
          this.setState ({ roleSelected })
